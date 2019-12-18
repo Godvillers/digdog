@@ -29,6 +29,9 @@
       .known_space {
         background-color: rgb(250, 250, 250);
       }
+      .hl {
+        border: 2px solid blue;
+      }
       .vault {
         background-color: lightblue;
       }
@@ -36,6 +39,11 @@
 	    width:100%;
         height:100%;
         background-color: lightblue;
+      }
+      .map_numbers {
+        border-style: none;
+        font-size:12px;
+        color:gray;
       }
     </style>
   </head>
@@ -56,20 +64,23 @@
     Голубеньким подсвечены возможные расположения клада
     <br>
     <br>
-    <small>данные от 13.12.2019</small>
+   <small>данные от 17.12.2019</small>
   </div>
  
 <script>
     const array_size = (19+19-3)
     var entry_row = 17;
     var entry_col = 17;
-    var known_map = [...Array(array_size)].map( x => Array(array_size).fill('') );
-    known_map[entry_row][entry_col] = 'В'
+    var empty_map = [...Array(array_size)].map( x => Array(array_size).fill('') );
+    empty_map[entry_row][entry_col] = 'В'
+    var known_list = {};
     map_to_show = [];
     var known_maps = [];
+    var hl_row;
+    var hl_col;
 
-    const onclick = "onclick='on_map_btn(this)' oncontextmenu='on_map_right(this);return false;'"
-    const known_positons = {'17х19': [
+    const onclick = "onclick='on_map_btn(this)' oncontextmenu='on_map_right(this);return false;'";
+    const known_positions = {'17х19': [
       [1, 1, 1, 17], 
       [1, 1, 2, 5], 
       [1, 1, 4, 14], 
@@ -124,6 +135,7 @@
       [4, 1, 12, 4], 
       [4, 1, 14, 13], 
       [5, 1, 5, 14], 
+      [5, 1, 12, 4], 
       [5, 1, 6, 3], 
       [5, 1, 14, 13], 
       [5, 1, 15, 1], 
@@ -247,7 +259,7 @@
 
     function generate_known_maps() {
       var amap = [];
-      for ([size, coords_list] of Object.entries(known_positons)) {
+      for ([size, coords_list] of Object.entries(known_positions)) {
         [rows, cols] = size.split('х').map(Number);
         [erow0, ecol0] = [0, 0];
         console.log('rows, cols', rows, cols)
@@ -264,7 +276,7 @@
                 if (c==entry_col-ecol || c==entry_col-ecol+cols-1 || r==entry_row-erow || r==entry_row-erow+rows-1)
                   amap[r][c] = '#';
                 else
-                  amap[r][c] = '';
+                  amap[r][c] = ' ';
               }
             }
             amap[entry_row][entry_col] = 'В';
@@ -280,26 +292,22 @@
     }
     
     function fit(amap) {
-      result = true;  
-      for(r=0; r<known_map.length; r++) {
-        for(c=0; c<known_map[0].length; c++) {
-          if( (known_map[r][c] == '#'  && amap[r][c] != '#') ||
-              (amap[r][c] == '#' && (known_map[r][c] == ' ' || known_map[r][c] == 'В')) ||
-              (known_map[r][c] != ''  && amap[r][c] == 'x') 
-              ) {
-            result = false;
-            break;
-          }
+      keys = Object.keys(known_list);
+      for (i=0; i<keys.length; i++) {
+        [row, cell] = keys[i].split(',');
+        console.log(keys[i], known_list[keys[i]], amap[row][cell]);
+        if (known_list[keys[i]] != amap[row][cell]) {
+           return false;
         }
       }
-      return result;
+      return true;
     }
     
     function combine_possible_maps() {
       var result = undefined;
       known_maps.forEach((amap, n) => {
-        console.log('combine_possible_maps()', n, fit(amap, known_map))
-        if(fit(amap)) {
+        // console.log('combine_possible_maps()', n, fit(amap));
+        if (fit(amap)) {
           if (result == undefined)
             result = deep_copy(amap);
           else {
@@ -324,20 +332,6 @@
       show_map();
     }
 
-    function is_known_map_empty() {
-      var result = true;
-      known_map.forEach((line, row) => {
-        line.forEach((cell, col) => {
-          if (cell==' ' || cell=='#') {
-             // console.log('is_known_map_empty()', cell, row, col,    false);
-             result = false;
-          }
-        });
-      });
-      console.log('is_known_map_empty()', result);
-      return result;
-    }
-
     function limits_to_show(amap) {
       var left = array_size-1
       var top_row = array_size-1
@@ -354,39 +348,55 @@
         });
       });
       result = [top_row, left, bottom, right];
-      console.log('generate_map_to_show', result);
       return result;
     }
 
-    function generate_map_html(amap, limits) {
+    function generate_map_html(amap, limits, force_buttons=false) {
       result = ''
       top_row = limits[0]
       left = limits[1]
       bottom = limits[2]
       right = limits[3]
+
+      result += "<tr><td  class='map_numbers'></td>";
+      for (col=left; col<=right; col++) {
+        result += `<td class='map_numbers' onclick=navi_click('c${col}')>${col-entry_col}</td>`;
+      }  
+      result += "<td  class='map_numbers'></td></tr>";
+
       for (row=top_row; row<=bottom; row++) {
-        result += "<tr>"
+        result += `<tr><td class='map_numbers' onclick=navi_click('r${row}')>${entry_row-row}</td>`
         for (col=left; col<=right; col++) {
           cell = amap[row][col];
-          if (known_map[row][col] == 'В') 
-            result += `<td class='enterance'>В</td>`;
-          else if (known_map[row][col] != '') {
-              result += `<td class='map_button'> <input type='button' id='${row}-${col}' ${onclick} class='${cell.indexOf("К") > -1 ? "vault_btn" : "button"}' value='${known_map[row][col]}'> </td>`;
+          if (col==hl_col || row==hl_row)
+            hl = "hl";
+          else 
+            hl = "";
+          if (cell == 'В') 
+            result += `<td class='enterance ${hl}'>В</td>`;
+          else if (known_list[[row,col]]!=undefined || force_buttons ) {
+              result += `<td class='map_button ${hl}'> <input type='button' id='${row}-${col}' ${onclick} class='${cell.indexOf("К") > -1 ? "vault_btn" : "button"}' value='${known_list[[row,col]]==undefined?" ":known_list[[row,col]]}'> </td>`;
           }
           else {
             if (cell.replace('К','').replace('?','')=='') 
-                result += `<td class='${cell.indexOf("К") > -1 ? "vault" : "known_space"}'> </td>`;
+                result += `<td class='${hl} ${cell.indexOf("К") > -1 ? "vault" : "known_space"}'> </td>`;
             else if (cell=='#') 
-                result += `<td class='known_wall'>#</td>`;
+                result += `<td class='known_wall ${hl}'>#</td>`;
             else if (cell.indexOf('#') > -1  || cell=="?") 
-                result += `<td class='map_button'> <input type='button' id='${row}-${col}' ${onclick} class='${cell.indexOf("К") > -1 ? "vault_btn" : "button"}' value='?'> </td>`;
+                result += `<td class='map_button ${hl}'> <input type='button' id='${row}-${col}' ${onclick} class='${cell.indexOf("К") > -1 ? "vault_btn" : "button"}' value='?'> </td>`;
             else            
-                result += `<td class='${cell.indexOf("К") > -1 ? "vault" : "known_space"}'> </td>`
+                result += `<td class='${hl} ${cell.indexOf("К") > -1 ? "vault" : "known_space"}'> </td>`
           }
         };
-        result += "</tr>"
+        result += `<td class='map_numbers' onclick=navi_click('r${row}')>${entry_row-row}</td></tr>`
       };
-      console.log(result)
+
+      result += "<tr><td  class='map_numbers' ></td>"
+        for (col=left; col<=right; col++) {
+          result += `<td class='map_numbers' onclick=navi_click('c${col}')>${col-entry_col}</td>`
+        }  
+      result += "<td  class='map_numbers'></td></tr>"
+
       return result;
     }
 
@@ -407,9 +417,9 @@
     }
 
     function show_map() {
-      if (is_known_map_empty())  {
-        document.getElementById("Карта").innerHTML = "<table>" +
-          empty_map_html() +
+      if (Object.keys(known_list).length < 2)  {
+        document.getElementById("Карта").innerHTML = "<div>Задайте две ячейки <br><br></div> <table>" +
+          generate_map_html(empty_map, [16, 16, 18, 18], force_buttons=true) +
           "</table>"
         return true;
       }
@@ -432,11 +442,15 @@
       var next = {'':'#', '#':'', ' ':'#'};
       
       [row, col] = button.id.split('-')
-      console.log(`${row}-${col} (${known_map[row][col]}) -> (${next[known_map[row][col]]})`);
-      prev = known_map[row][col]
-      known_map[row][col] = next[known_map[row][col]]
+      if (known_list[[row,col]] == '#')
+        delete known_list[[row,col]]
+      else
+        known_list[[row,col]] = '#'
       if (!show_map()) {
-        known_map[row][col] = prev;  
+        if (known_list[[row,col]] == '#')
+          delete known_list[[row,col]]
+        else
+          known_list[[row,col]] = '#'
         show_map();      
       };
     }
@@ -445,14 +459,30 @@
       var next = {'':' ', '#':' ', ' ':''};
       
       [row, col] = button.id.split('-')
-      console.log(`${row}-${col} (${known_map[row][col]}) -> (${next[known_map[row][col]]})`);
-      prev = known_map[row][col]
-      known_map[row][col] = next[known_map[row][col]]
+      if (known_list[[row,col]] == ' ')
+        delete known_list[[row,col]]
+      else
+        known_list[[row,col]] = ' '
       if (!show_map()) {
-        known_map[row][col] = prev;  
+        if (known_list[[row,col]] == ' ')
+          delete known_list[[row,col]]
+        else
+          known_list[[row,col]] = ' '
         show_map();      
       };
       return false;
+    }
+    
+    function navi_click(cell) {
+      console.log(cell)
+      if (cell[0]=='c')  {
+        hl_col = cell.substr(1)==hl_col ? undefined : cell.substr(1);
+      }
+      else {
+        hl_row = cell.substr(1)==hl_row ? undefined : cell.substr(1);
+      }
+      show_map();      
+      console.log(hl_row, hl_col);
     }
 
     init()
