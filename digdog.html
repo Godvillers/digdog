@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <base target="_top">
+    <title>Где собака зарыта (аквы, Годвилль)</title>
+    <style>
+      table {
+        border-collapse: collapse;
+      }
+      th, td {
+        border: 1px solid black;
+        height: 25px; 
+        width: 25px; 
+        text-align: center;
+        vertical-align: center;
+	padding: 0px;
+      }
+      .button {
+	    width:100%;
+        height:100%
+      }
+      .map_button {
+        vertical-align: top;
+      }
+      .known_wall {
+        background-color: gray;
+      }
+      .known_space {
+        background-color: rgb(250, 250, 250);
+      }
+      .vault {
+        background-color: lightblue;
+      }
+      .vault_btn {
+	    width:100%;
+        height:100%;
+        background-color: lightblue;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <div id="Карта">
+      </div>
+    </form> 
+  <br>
+  <br>
+  <div id="info"> 
+    Левая кнопка устанавливает/убирает капиталку<br>
+    Правая кнопка устанавливает/убирает пустую клетку (не-капиталку)<br>
+    Обновление страницы обнуляет карту<br>
+    <br>
+    Клетки с кнопками воспринимают нажатия мыши
+    <br>
+    Голубеньким подсвечены возможные расположения клада
+    <br>
+    <br>
+    <small>данные от 13.12.2019</small>
+  </div>
+ 
+<script>
+    const array_size = (19+19-3)
+    var entry_row = 17;
+    var entry_col = 17;
+    var known_map = [...Array(array_size)].map( x => Array(array_size).fill('') );
+    known_map[entry_row][entry_col] = 'В'
+    map_to_show = [];
+    var known_maps = [];
+
+    const onclick = "onclick='on_map_btn(this)' oncontextmenu='on_map_right(this);return false;'"
+    const known_positons = {'17х19': [
+      [1, 1, 1, 17], 
+      [1, 1, 2, 5], 
+      [1, 1, 4, 14], 
+      [1, 1, 5, 1], 
+      [1, 1, 7, 8], 
+      [1, 1, 8, 8], 
+      [1, 1, 9, 15], 
+      [1, 1, 10, 15], 
+      [1, 1, 11, 4], 
+      [1, 1, 12, 4], 
+      [1, 1, 14, 16], 
+      [1, 3, 2, 16], 
+      [1, 3, 4, 4], 
+      [1, 3, 5, 4], 
+      [1, 3, 6, 15], 
+      [1, 3, 7, 15], 
+      [1, 3, 8, 8], 
+      [1, 3, 9, 8], 
+      [1, 3, 11, 1], 
+      [1, 3, 12, 14], 
+      [1, 3, 14, 5], 
+      [1, 3, 15, 17], 
+      [1, 6, 2, 2], 
+      [1, 6, 4, 14], 
+      [1, 6, 5, 14], 
+      [1, 6, 6, 3], 
+      [1, 6, 7, 3], 
+      [1, 6, 8, 10], 
+      [1, 6, 9, 10], 
+      [1, 6, 11, 17], 
+      [1, 6, 12, 4], 
+      [1, 6, 14, 13], 
+      [1, 6, 15, 1], 
+      [1, 8, 1, 1], 
+      [1, 8, 2, 13], 
+      [1, 8, 4, 4], 
+      [1, 8, 5, 17], 
+      [1, 8, 7, 10], 
+      [1, 8, 8, 10], 
+      [1, 8, 9, 3], 
+      [1, 8, 10, 3], 
+      [1, 8, 11, 14], 
+      [1, 8, 12, 14], 
+      [1, 8, 14, 2], 
+      [4, 1, 2, 2], 
+      [4, 1, 4, 14], 
+      [4, 1, 6, 3], 
+      [4, 1, 7, 3], 
+      [4, 1, 8, 10], 
+      [4, 1, 9, 10], 
+      [4, 1, 11, 17], 
+      [4, 1, 12, 4], 
+      [4, 1, 14, 13], 
+      [5, 1, 5, 14], 
+      [5, 1, 6, 3], 
+      [5, 1, 14, 13], 
+      [5, 1, 15, 1], 
+      [6, 1, 2, 13], 
+      [6, 1, 2, 16], 
+      [6, 1, 4, 4], 
+      [6, 1, 6, 15], 
+      [6, 1, 7, 10], 
+      [6, 1, 8, 8], 
+      [6, 1, 9, 3], 
+      [6, 1, 11, 1], 
+      [6, 1, 12, 14], 
+      [6, 1, 14, 2], 
+      [6, 1, 14, 5], 
+      [6, 1, 15, 17], 
+      [7, 1, 1, 1], 
+      [7, 1, 2, 13], 
+      [7, 1, 2, 16], 
+      [7, 1, 4, 4], 
+      [7, 1, 5, 17], 
+      [7, 1, 7, 15], 
+      [7, 1, 8, 10], 
+      [7, 1, 9, 8], 
+      [7, 1, 10, 3], 
+      [7, 1, 11, 14], 
+      [7, 1, 12, 14], 
+      [7, 1, 14, 2], 
+      [7, 1, 14, 5] ],
+    '18х18': [
+      [1, 1, 2, 5], 
+      [1, 1, 4, 12], 
+      [1, 1, 4, 13], 
+      [1, 1, 5, 2], 
+      [1, 1, 6, 16], 
+      [1, 1, 8, 7], 
+      [1, 1, 9, 14], 
+      [1, 1, 13, 4], 
+      [1, 1, 14, 9], 
+      [1, 1, 15, 15], 
+      [1, 3, 2, 15], 
+      [1, 3, 8, 14], 
+      [1, 3, 10, 8], 
+      [1, 3, 11, 16], 
+      [1, 3, 13, 13], 
+      [1, 3, 15, 5], 
+      [1, 5, 1, 11], 
+      [1, 5, 2, 2], 
+      [1, 5, 12, 15], 
+      [1, 5, 13, 5], 
+      [1, 6, 2, 2], 
+      [1, 6, 5, 13], 
+      [1, 6, 8, 3], 
+      [1, 6, 11, 1], 
+      [1, 6, 13, 4], 
+      [1, 6, 15, 12], 
+      [1, 8, 2, 12], 
+      [1, 8, 5, 15], 
+      [1, 8, 9, 3], 
+      [1, 8, 12, 13], 
+      [1, 8, 13, 13], 
+      [1, 8, 14, 8], 
+      [1, 8, 15, 2], 
+      [1, 8, 16, 11] ],
+    '16х18': [
+      [1, 1, 2, 5], 
+      [1, 1, 4, 13], 
+      [1, 1, 6, 8], 
+      [1, 1, 8, 14], 
+      [1, 1, 10, 4], 
+      [1, 1, 13, 15], 
+      [1, 3, 2, 15], 
+      [1, 3, 5, 4], 
+      [1, 3, 7, 14], 
+      [1, 3, 9, 8], 
+      [1, 3, 11, 13], 
+      [1, 3, 13, 5], 
+      [1, 6, 2, 2], 
+      [1, 6, 5, 13], 
+      [1, 6, 7, 3], 
+      [1, 6, 9, 9], 
+      [1, 6, 11, 4], 
+      [1, 6, 13, 12], 
+      [1, 7, 2, 12], 
+      [1, 7, 4, 4], 
+      [1, 7, 8, 3], 
+      [1, 7, 10, 13], 
+      [1, 7, 13, 2], 
+      [5, 1, 2, 2], 
+      [5, 1, 4, 4], 
+      [5, 1, 5, 13], 
+      [5, 1, 7, 3], 
+      [5, 1, 8, 3], 
+      [5, 1, 9, 9], 
+      [5, 1, 10, 13], 
+      [5, 1, 11, 4], 
+      [5, 1, 13, 2], 
+      [5, 1, 13, 12], 
+      [7, 1, 2, 15], 
+      [7, 1, 5, 4], 
+      [7, 1, 7, 14], 
+      [7, 1, 9, 8], 
+      [7, 1, 11, 13], 
+      [7, 1, 1    , 5] ]
+    };
+    
+    function deep_copy(amap) {
+      return amap.map(row => row.slice())
+    }
+
+    function transpose(amap) {
+      return amap[0].map((col, i) => amap.map(row => row[i]))
+    }
+    
+    function flip_vertical(amap) {
+      return deep_copy(amap).reverse();
+    }
+    
+    function flip_horizontal(amap) {
+      return amap.map(row => row.slice().reverse())
+    }
+
+    function generate_known_maps() {
+      var amap = [];
+      for ([size, coords_list] of Object.entries(known_positons)) {
+        [rows, cols] = size.split('х').map(Number);
+        [erow0, ecol0] = [0, 0];
+        console.log('rows, cols', rows, cols)
+        coords_list.forEach( coords =>  {
+          [erow, ecol, vrow, vcol] = coords;    
+          if (erow0 == erow && ecol0 == ecol) {
+            amap = known_maps[known_maps.length-1]
+          }
+          else {
+            amap = [...Array(array_size)].map( x => Array(array_size).fill('x') );
+            known_maps.push(amap)
+            for(c=entry_col-ecol; c<entry_col-ecol+cols; c++) {
+              for(r=entry_row-erow; r<entry_row-erow+rows; r++) {
+                if (c==entry_col-ecol || c==entry_col-ecol+cols-1 || r==entry_row-erow || r==entry_row-erow+rows-1)
+                  amap[r][c] = '#';
+                else
+                  amap[r][c] = '';
+              }
+            }
+            amap[entry_row][entry_col] = 'В';
+            erow0 = erow;
+            ecol0 = ecol;
+          }
+          amap[entry_row-erow+vrow][entry_col-ecol+vcol] = 'К';
+        });
+      }
+      known_maps = known_maps.concat(known_maps.map(amap => transpose(amap)));
+      known_maps = known_maps.concat(known_maps.map(amap => flip_vertical(amap)));
+      known_maps = known_maps.concat(known_maps.map(amap => flip_horizontal(amap)));
+    }
+    
+    function fit(amap) {
+      result = true;  
+      for(r=0; r<known_map.length; r++) {
+        for(c=0; c<known_map[0].length; c++) {
+          if( (known_map[r][c] == '#'  && amap[r][c] != '#') ||
+              (amap[r][c] == '#' && (known_map[r][c] == ' ' || known_map[r][c] == 'В')) ||
+              (known_map[r][c] != ''  && amap[r][c] == 'x') 
+              ) {
+            result = false;
+            break;
+          }
+        }
+      }
+      return result;
+    }
+    
+    function combine_possible_maps() {
+      var result = undefined;
+      known_maps.forEach((amap, n) => {
+        console.log('combine_possible_maps()', n, fit(amap, known_map))
+        if(fit(amap)) {
+          if (result == undefined)
+            result = deep_copy(amap);
+          else {
+            for(r=0; r<result.length; r++) {
+              for(c=0; c<result[0].length; c++) {
+                if (amap[r][c] != result[r][c]) {
+                  if (result[r][c].indexOf('?') == -1)
+                    result[r][c] += '?';
+                  if (result[r][c].indexOf(amap[r][c]) == -1)
+                    result[r][c] += amap[r][c]
+                }
+              }
+            }
+          }
+        }
+      });
+      return result
+    }
+    
+    function init() {
+      generate_known_maps();
+      show_map();
+    }
+
+    function is_known_map_empty() {
+      var result = true;
+      known_map.forEach((line, row) => {
+        line.forEach((cell, col) => {
+          if (cell==' ' || cell=='#') {
+             // console.log('is_known_map_empty()', cell, row, col,    false);
+             result = false;
+          }
+        });
+      });
+      console.log('is_known_map_empty()', result);
+      return result;
+    }
+
+    function limits_to_show(amap) {
+      var left = array_size-1
+      var top_row = array_size-1
+      var right = 0
+      var bottom = 0
+      amap.forEach((line, row) => {
+        line.forEach((cell, col) => {
+          if (cell != 'x') {
+            left = Math.min(left, col)
+            right = Math.max(right, col)
+            top_row = Math.min(top_row, row)
+            bottom = Math.max(bottom, row)
+          }
+        });
+      });
+      result = [top_row, left, bottom, right];
+      console.log('generate_map_to_show', result);
+      return result;
+    }
+
+    function generate_map_html(amap, limits) {
+      result = ''
+      top_row = limits[0]
+      left = limits[1]
+      bottom = limits[2]
+      right = limits[3]
+      for (row=top_row; row<=bottom; row++) {
+        result += "<tr>"
+        for (col=left; col<=right; col++) {
+          cell = amap[row][col];
+          if (known_map[row][col] == 'В') 
+            result += `<td class='enterance'>В</td>`;
+          else if (known_map[row][col] != '') {
+              result += `<td class='map_button'> <input type='button' id='${row}-${col}' ${onclick} class='${cell.indexOf("К") > -1 ? "vault_btn" : "button"}' value='${known_map[row][col]}'> </td>`;
+          }
+          else {
+            if (cell.replace('К','').replace('?','')=='') 
+                result += `<td class='${cell.indexOf("К") > -1 ? "vault" : "known_space"}'> </td>`;
+            else if (cell=='#') 
+                result += `<td class='known_wall'>#</td>`;
+            else if (cell.indexOf('#') > -1  || cell=="?") 
+                result += `<td class='map_button'> <input type='button' id='${row}-${col}' ${onclick} class='${cell.indexOf("К") > -1 ? "vault_btn" : "button"}' value='?'> </td>`;
+            else            
+                result += `<td class='${cell.indexOf("К") > -1 ? "vault" : "known_space"}'> </td>`
+          }
+        };
+        result += "</tr>"
+      };
+      console.log(result)
+      return result;
+    }
+
+    function empty_map_html() {
+      return `<tr>` + 
+        `<td class='map_button'> <input type='button' id='${entry_row-1}-${entry_col-1}' ${onclick} class='button' value='?'> </td>` +
+        `<td class='map_button'> <input type='button' id='${entry_row-1}-${entry_col}' ${onclick} class='button' value='?'> </td>` +
+        `<td class='map_button'> <input type='button' id='${entry_row-1}-${entry_col+1}' ${onclick} class='button' value='?'> </td>` +
+        `</tr><tr>` +
+        `<td class='map_button'> <input type='button' id='${entry_row}-${entry_col-1}' ${onclick} class='button' value='?'> </td>` +
+        `<td class='enterance'>В</td>` +
+        `<td class='map_button'> <input type='button' id='${entry_row}-${entry_col+1}' ${onclick} class='button' value='?'> </td>` +
+        `</tr><tr>` +
+        `<td class='map_button'> <input type='button' id='${entry_row+1}-${entry_col-1}' ${onclick} class='button' value='?'> </td>` +
+        `<td class='map_button'> <input type='button' id='${entry_row+1}-${entry_col}' ${onclick} class='button' value='?'> </td>` +
+        `<td class='map_button'> <input type='button' id='${entry_row+1}-${entry_col+1}' ${onclick} class='button' value='?'> </td>` +
+        `</tr>`
+    }
+
+    function show_map() {
+      if (is_known_map_empty())  {
+        document.getElementById("Карта").innerHTML = "<table>" +
+          empty_map_html() +
+          "</table>"
+        return true;
+      }
+      else {
+        var possible_map = combine_possible_maps();
+        if (possible_map==undefined) {
+          window.alert("Нет карт с такими условиями");
+          return false;
+        }
+        else {
+          document.getElementById("Карта").innerHTML = "<table>" +
+            generate_map_html(possible_map, limits_to_show(possible_map)) +
+          "</table>"
+          return true;
+        }
+      } 
+    }
+
+    function on_map_btn(button) {
+      var next = {'':'#', '#':'', ' ':'#'};
+      
+      [row, col] = button.id.split('-')
+      console.log(`${row}-${col} (${known_map[row][col]}) -> (${next[known_map[row][col]]})`);
+      prev = known_map[row][col]
+      known_map[row][col] = next[known_map[row][col]]
+      if (!show_map()) {
+        known_map[row][col] = prev;  
+        show_map();      
+      };
+    }
+
+    function on_map_right(button) {
+      var next = {'':' ', '#':' ', ' ':''};
+      
+      [row, col] = button.id.split('-')
+      console.log(`${row}-${col} (${known_map[row][col]}) -> (${next[known_map[row][col]]})`);
+      prev = known_map[row][col]
+      known_map[row][col] = next[known_map[row][col]]
+      if (!show_map()) {
+        known_map[row][col] = prev;  
+        show_map();      
+      };
+      return false;
+    }
+
+    init()
+    var state;
+
+</script>
+
+  </body>
+</html>
+
+
