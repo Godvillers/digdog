@@ -4,14 +4,14 @@
   <head>
     <base target="_top">
     <title>Где собака зарыта (аквы, Годвилль)</title>
-    <style type="text/css">
+    <style  type="text/css">
       table {
         border-collapse: collapse;
       }
       th, td {
         border: 1px solid black;
-        height: 25px; 
-        width: 25px; 
+        height: 25px;
+        width: 25px;
         text-align: center;
         vertical-align: center;
         padding: 0px;
@@ -51,10 +51,10 @@
     <form>
       <div id="Карта">
       </div>
-    </form> 
+    </form>
   <br>
   <br>
-  <div id="info"> 
+  <div id="info">
     Левая кнопка устанавливает/убирает капиталку<br>
     Правая кнопка устанавливает/убирает пустую клетку (не-капиталку)<br>
     Обновление страницы обнуляет карту<br>
@@ -66,7 +66,7 @@
     <br>
    <small>данные от 17.12.2019</small>
   </div>
- 
+
 <script type="text/javascript">
 (function() {
 "use strict";
@@ -82,166 +82,166 @@
     var hl_col;
 
     const known_positions = {'17х19': [
-      [1, 1, 1, 17], 
-      [1, 1, 2, 5], 
-      [1, 1, 4, 14], 
-      [1, 1, 5, 1], 
-      [1, 1, 7, 8], 
-      [1, 1, 8, 8], 
-      [1, 1, 9, 15], 
-      [1, 1, 10, 15], 
-      [1, 1, 11, 4], 
-      [1, 1, 12, 4], 
-      [1, 1, 14, 16], 
-      [1, 3, 2, 16], 
-      [1, 3, 4, 4], 
-      [1, 3, 5, 4], 
-      [1, 3, 6, 15], 
-      [1, 3, 7, 15], 
-      [1, 3, 8, 8], 
-      [1, 3, 9, 8], 
-      [1, 3, 11, 1], 
-      [1, 3, 12, 14], 
-      [1, 3, 14, 5], 
-      [1, 3, 15, 17], 
-      [1, 6, 2, 2], 
-      [1, 6, 4, 14], 
-      [1, 6, 5, 14], 
-      [1, 6, 6, 3], 
-      [1, 6, 7, 3], 
-      [1, 6, 8, 10], 
-      [1, 6, 9, 10], 
-      [1, 6, 11, 17], 
-      [1, 6, 12, 4], 
-      [1, 6, 14, 13], 
-      [1, 6, 15, 1], 
-      [1, 8, 1, 1], 
-      [1, 8, 2, 13], 
-      [1, 8, 4, 4], 
-      [1, 8, 5, 17], 
-      [1, 8, 7, 10], 
-      [1, 8, 8, 10], 
-      [1, 8, 9, 3], 
-      [1, 8, 10, 3], 
-      [1, 8, 11, 14], 
-      [1, 8, 12, 14], 
-      [1, 8, 14, 2], 
-      [4, 1, 2, 2], 
-      [4, 1, 4, 14], 
-      [4, 1, 6, 3], 
-      [4, 1, 7, 3], 
-      [4, 1, 8, 10], 
-      [4, 1, 9, 10], 
-      [4, 1, 11, 17], 
-      [4, 1, 12, 4], 
-      [4, 1, 14, 13], 
-      [5, 1, 5, 14], 
-      [5, 1, 12, 4], 
-      [5, 1, 6, 3], 
-      [5, 1, 14, 13], 
-      [5, 1, 15, 1], 
-      [6, 1, 2, 13], 
-      [6, 1, 2, 16], 
-      [6, 1, 4, 4], 
-      [6, 1, 6, 15], 
-      [6, 1, 7, 10], 
-      [6, 1, 8, 8], 
-      [6, 1, 9, 3], 
-      [6, 1, 11, 1], 
-      [6, 1, 12, 14], 
-      [6, 1, 14, 2], 
-      [6, 1, 14, 5], 
-      [6, 1, 15, 17], 
-      [7, 1, 1, 1], 
-      [7, 1, 2, 13], 
-      [7, 1, 2, 16], 
-      [7, 1, 4, 4], 
-      [7, 1, 5, 17], 
-      [7, 1, 7, 15], 
-      [7, 1, 8, 10], 
-      [7, 1, 9, 8], 
-      [7, 1, 10, 3], 
-      [7, 1, 11, 14], 
-      [7, 1, 12, 14], 
-      [7, 1, 14, 2], 
+      [1, 1, 1, 17],
+      [1, 1, 2, 5],
+      [1, 1, 4, 14],
+      [1, 1, 5, 1],
+      [1, 1, 7, 8],
+      [1, 1, 8, 8],
+      [1, 1, 9, 15],
+      [1, 1, 10, 15],
+      [1, 1, 11, 4],
+      [1, 1, 12, 4],
+      [1, 1, 14, 16],
+      [1, 3, 2, 16],
+      [1, 3, 4, 4],
+      [1, 3, 5, 4],
+      [1, 3, 6, 15],
+      [1, 3, 7, 15],
+      [1, 3, 8, 8],
+      [1, 3, 9, 8],
+      [1, 3, 11, 1],
+      [1, 3, 12, 14],
+      [1, 3, 14, 5],
+      [1, 3, 15, 17],
+      [1, 6, 2, 2],
+      [1, 6, 4, 14],
+      [1, 6, 5, 14],
+      [1, 6, 6, 3],
+      [1, 6, 7, 3],
+      [1, 6, 8, 10],
+      [1, 6, 9, 10],
+      [1, 6, 11, 17],
+      [1, 6, 12, 4],
+      [1, 6, 14, 13],
+      [1, 6, 15, 1],
+      [1, 8, 1, 1],
+      [1, 8, 2, 13],
+      [1, 8, 4, 4],
+      [1, 8, 5, 17],
+      [1, 8, 7, 10],
+      [1, 8, 8, 10],
+      [1, 8, 9, 3],
+      [1, 8, 10, 3],
+      [1, 8, 11, 14],
+      [1, 8, 12, 14],
+      [1, 8, 14, 2],
+      [4, 1, 2, 2],
+      [4, 1, 4, 14],
+      [4, 1, 6, 3],
+      [4, 1, 7, 3],
+      [4, 1, 8, 10],
+      [4, 1, 9, 10],
+      [4, 1, 11, 17],
+      [4, 1, 12, 4],
+      [4, 1, 14, 13],
+      [5, 1, 5, 14],
+      [5, 1, 12, 4],
+      [5, 1, 6, 3],
+      [5, 1, 14, 13],
+      [5, 1, 15, 1],
+      [6, 1, 2, 13],
+      [6, 1, 2, 16],
+      [6, 1, 4, 4],
+      [6, 1, 6, 15],
+      [6, 1, 7, 10],
+      [6, 1, 8, 8],
+      [6, 1, 9, 3],
+      [6, 1, 11, 1],
+      [6, 1, 12, 14],
+      [6, 1, 14, 2],
+      [6, 1, 14, 5],
+      [6, 1, 15, 17],
+      [7, 1, 1, 1],
+      [7, 1, 2, 13],
+      [7, 1, 2, 16],
+      [7, 1, 4, 4],
+      [7, 1, 5, 17],
+      [7, 1, 7, 15],
+      [7, 1, 8, 10],
+      [7, 1, 9, 8],
+      [7, 1, 10, 3],
+      [7, 1, 11, 14],
+      [7, 1, 12, 14],
+      [7, 1, 14, 2],
       [7, 1, 14, 5] ],
     '18х18': [
-      [1, 1, 2, 5], 
-      [1, 1, 4, 12], 
-      [1, 1, 4, 13], 
-      [1, 1, 5, 2], 
-      [1, 1, 6, 16], 
-      [1, 1, 8, 7], 
-      [1, 1, 9, 14], 
-      [1, 1, 13, 4], 
-      [1, 1, 14, 9], 
-      [1, 1, 15, 15], 
-      [1, 3, 2, 15], 
-      [1, 3, 8, 14], 
-      [1, 3, 10, 8], 
-      [1, 3, 11, 16], 
-      [1, 3, 13, 13], 
-      [1, 3, 15, 5], 
-      [1, 5, 1, 11], 
-      [1, 5, 2, 2], 
-      [1, 5, 12, 15], 
-      [1, 5, 13, 5], 
-      [1, 6, 2, 2], 
-      [1, 6, 5, 13], 
-      [1, 6, 8, 3], 
-      [1, 6, 11, 1], 
-      [1, 6, 13, 4], 
-      [1, 6, 15, 12], 
-      [1, 8, 2, 12], 
-      [1, 8, 5, 15], 
-      [1, 8, 9, 3], 
-      [1, 8, 12, 13], 
-      [1, 8, 13, 13], 
-      [1, 8, 14, 8], 
-      [1, 8, 15, 2], 
+      [1, 1, 2, 5],
+      [1, 1, 4, 12],
+      [1, 1, 4, 13],
+      [1, 1, 5, 2],
+      [1, 1, 6, 16],
+      [1, 1, 8, 7],
+      [1, 1, 9, 14],
+      [1, 1, 13, 4],
+      [1, 1, 14, 9],
+      [1, 1, 15, 15],
+      [1, 3, 2, 15],
+      [1, 3, 8, 14],
+      [1, 3, 10, 8],
+      [1, 3, 11, 16],
+      [1, 3, 13, 13],
+      [1, 3, 15, 5],
+      [1, 5, 1, 11],
+      [1, 5, 2, 2],
+      [1, 5, 12, 15],
+      [1, 5, 13, 5],
+      [1, 6, 2, 2],
+      [1, 6, 5, 13],
+      [1, 6, 8, 3],
+      [1, 6, 11, 1],
+      [1, 6, 13, 4],
+      [1, 6, 15, 12],
+      [1, 8, 2, 12],
+      [1, 8, 5, 15],
+      [1, 8, 9, 3],
+      [1, 8, 12, 13],
+      [1, 8, 13, 13],
+      [1, 8, 14, 8],
+      [1, 8, 15, 2],
       [1, 8, 16, 11] ],
     '16х18': [
-      [1, 1, 2, 5], 
-      [1, 1, 4, 13], 
-      [1, 1, 6, 8], 
-      [1, 1, 8, 14], 
-      [1, 1, 10, 4], 
-      [1, 1, 13, 15], 
-      [1, 3, 2, 15], 
-      [1, 3, 5, 4], 
-      [1, 3, 7, 14], 
-      [1, 3, 9, 8], 
-      [1, 3, 11, 13], 
-      [1, 3, 13, 5], 
-      [1, 6, 2, 2], 
-      [1, 6, 5, 13], 
-      [1, 6, 7, 3], 
-      [1, 6, 9, 9], 
-      [1, 6, 11, 4], 
-      [1, 6, 13, 12], 
-      [1, 7, 2, 12], 
-      [1, 7, 4, 4], 
-      [1, 7, 8, 3], 
-      [1, 7, 10, 13], 
-      [1, 7, 13, 2], 
-      [5, 1, 2, 2], 
-      [5, 1, 4, 4], 
-      [5, 1, 5, 13], 
-      [5, 1, 7, 3], 
-      [5, 1, 8, 3], 
-      [5, 1, 9, 9], 
-      [5, 1, 10, 13], 
-      [5, 1, 11, 4], 
-      [5, 1, 13, 2], 
-      [5, 1, 13, 12], 
-      [7, 1, 2, 15], 
-      [7, 1, 5, 4], 
-      [7, 1, 7, 14], 
-      [7, 1, 9, 8], 
-      [7, 1, 11, 13], 
-      [7, 1, 1    , 5] ]
+      [1, 1, 2, 5],
+      [1, 1, 4, 13],
+      [1, 1, 6, 8],
+      [1, 1, 8, 14],
+      [1, 1, 10, 4],
+      [1, 1, 13, 15],
+      [1, 3, 2, 15],
+      [1, 3, 5, 4],
+      [1, 3, 7, 14],
+      [1, 3, 9, 8],
+      [1, 3, 11, 13],
+      [1, 3, 13, 5],
+      [1, 6, 2, 2],
+      [1, 6, 5, 13],
+      [1, 6, 7, 3],
+      [1, 6, 9, 9],
+      [1, 6, 11, 4],
+      [1, 6, 13, 12],
+      [1, 7, 2, 12],
+      [1, 7, 4, 4],
+      [1, 7, 8, 3],
+      [1, 7, 10, 13],
+      [1, 7, 13, 2],
+      [5, 1, 2, 2],
+      [5, 1, 4, 4],
+      [5, 1, 5, 13],
+      [5, 1, 7, 3],
+      [5, 1, 8, 3],
+      [5, 1, 9, 9],
+      [5, 1, 10, 13],
+      [5, 1, 11, 4],
+      [5, 1, 13, 2],
+      [5, 1, 13, 12],
+      [7, 1, 2, 15],
+      [7, 1, 5, 4],
+      [7, 1, 7, 14],
+      [7, 1, 9, 8],
+      [7, 1, 11, 13],
+      [7, 1, 1, 5] ]
     };
-    
+
     function deep_copy(amap) {
       return amap.map(row => row.slice())
     }
@@ -249,11 +249,11 @@
     function transpose(amap) {
       return amap[0].map((col, i) => amap.map(row => row[i]))
     }
-    
+
     function flip_vertical(amap) {
       return deep_copy(amap).reverse();
     }
-    
+
     function flip_horizontal(amap) {
       return amap.map(row => row.slice().reverse())
     }
@@ -263,9 +263,8 @@
       for (var [size, coords_list] of Object.entries(known_positions)) {
         var [rows, cols] = size.split('х').map(Number);
         var [erow0, ecol0] = [0, 0];
-        console.log('rows, cols', rows, cols)
         coords_list.forEach( coords =>  {
-          var [erow, ecol, vrow, vcol] = coords;    
+          var [erow, ecol, vrow, vcol] = coords;
           if (erow0 === erow && ecol0 === ecol) {
             amap = known_maps[known_maps.length-1]
           }
@@ -291,23 +290,21 @@
       known_maps = known_maps.concat(known_maps.map(amap => flip_vertical(amap)));
       known_maps = known_maps.concat(known_maps.map(amap => flip_horizontal(amap)));
     }
-    
+
     function fit(amap) {
       var keys = Object.keys(known_list);
       for (var i=0; i<keys.length; i++) {
         var [row, cell] = keys[i].split(',');
-        console.log(keys[i], known_list[keys[i]], amap[row][cell]);
         if (known_list[keys[i]] !== amap[row][cell]) {
            return false;
         }
       }
       return true;
     }
-    
+
     function combine_possible_maps() {
       var result = undefined;
       known_maps.forEach((amap, n) => {
-        // console.log('combine_possible_maps()', n, fit(amap));
         if (fit(amap)) {
           if (result === undefined)
             result = deep_copy(amap);
@@ -327,7 +324,7 @@
       });
       return result
     }
-    
+
     function init() {
       generate_known_maps();
       show_map();
@@ -349,42 +346,41 @@
           }
         });
       });
-      var result = [top_row, left, bottom, right];
-      return result;
+      return [top_row, left, bottom, right];
     }
 
     function generate_map_html(amap, limits, force_buttons=false) {
-      var result = '';
+      var result = ''
       var [top_row, left, bottom, right] = limits;
-      var col;
+      var hl;
 
       result += "<tr><td  class='map_numbers'></td>";
-      for (col=left; col<=right; col++) {
+      for (var col=left; col<=right; col++) {
         result += `<td class='map_numbers' onclick="navi_click('c${col}')">${col-entry_col}</td>`;
-      }  
+      }
       result += "<td  class='map_numbers'></td></tr>";
 
       for (var row=top_row; row<=bottom; row++) {
         result += `<tr><td class='map_numbers' onclick="navi_click('r${row}')">${entry_row-row}</td>`
         for (col=left; col<=right; col++) {
-          var cell = amap[row][col], hl;
-          if (col===+hl_col || row===+hl_row)
+          var cell = amap[row][col];
+          if (col===hl_col || row===hl_row)
             hl = "hl";
-          else 
+          else
             hl = "";
-          if (cell === 'В') 
+          if (cell === 'В')
             result += `<td class='enterance ${hl}'>В</td>`;
-          else if (known_list[[row,col]]!==undefined || force_buttons ) {
-              result += `<td class='map_button ${hl}'> <input type='button' id='${row}-${col}' class='${cell.indexOf("К") > -1 ? "vault_btn" : "button"}' value='${known_list[[row,col]]===undefined?" ":known_list[[row,col]]}'> </td>`;
+          else if (known_list[[row,col]] !== undefined || force_buttons ) {
+              result += `<td class='map_button ${hl}'> <input type='button' id='${row}-${col}' class='${cell.indexOf("К") > -1 ? "vault_btn" : "button"}' value='${known_list[[row,col]]==undefined?" ":known_list[[row,col]]}'> </td>`;
           }
           else {
-            if (cell.replace('К','').replace('?','')==='') 
+            if (cell.replace('К','').replace('?','') === '')
                 result += `<td class='${hl} ${cell.indexOf("К") > -1 ? "vault" : "known_space"}'> </td>`;
-            else if (cell==='#') 
+            else if (cell === '#')
                 result += `<td class='known_wall ${hl}'>#</td>`;
-            else if (cell.indexOf('#') > -1  || cell==="?") 
+            else if (cell.indexOf('#') > -1  || cell === "?")
                 result += `<td class='map_button ${hl}'> <input type='button' id='${row}-${col}' class='${cell.indexOf("К") > -1 ? "vault_btn" : "button"}' value='?'> </td>`;
-            else            
+            else
                 result += `<td class='${hl} ${cell.indexOf("К") > -1 ? "vault" : "known_space"}'> </td>`
           }
         };
@@ -394,26 +390,10 @@
       result += "<tr><td  class='map_numbers' ></td>"
         for (col=left; col<=right; col++) {
           result += `<td class='map_numbers' onclick="navi_click('c${col}')">${col-entry_col}</td>`
-        }  
+        }
       result += "<td  class='map_numbers'></td></tr>"
 
       return result;
-    }
-
-    function empty_map_html() {
-      return `<tr>` + 
-        `<td class='map_button'> <input type='button' id='${entry_row-1}-${entry_col-1}' class='button' value='?'> </td>` +
-        `<td class='map_button'> <input type='button' id='${entry_row-1}-${entry_col}' class='button' value='?'> </td>` +
-        `<td class='map_button'> <input type='button' id='${entry_row-1}-${entry_col+1}' class='button' value='?'> </td>` +
-        `</tr><tr>` +
-        `<td class='map_button'> <input type='button' id='${entry_row}-${entry_col-1}' class='button' value='?'> </td>` +
-        `<td class='enterance'>В</td>` +
-        `<td class='map_button'> <input type='button' id='${entry_row}-${entry_col+1}' class='button' value='?'> </td>` +
-        `</tr><tr>` +
-        `<td class='map_button'> <input type='button' id='${entry_row+1}-${entry_col-1}' class='button' value='?'> </td>` +
-        `<td class='map_button'> <input type='button' id='${entry_row+1}-${entry_col}' class='button' value='?'> </td>` +
-        `<td class='map_button'> <input type='button' id='${entry_row+1}-${entry_col+1}' class='button' value='?'> </td>` +
-        `</tr>`
     }
 
     function show_map() {
@@ -425,7 +405,7 @@
       }
       else {
         var possible_map = combine_possible_maps();
-        if (possible_map===undefined) {
+        if (possible_map === undefined) {
           window.alert("Нет карт с такими условиями");
           return false;
         }
@@ -435,12 +415,10 @@
           "</table>"
           return true;
         }
-      } 
+      }
     }
 
     function on_map_btn(button) {
-      var next = {'':'#', '#':'', ' ':'#'};
-      
       var [row, col] = button.id.split('-')
       if (known_list[[row,col]] === '#')
         delete known_list[[row,col]]
@@ -451,13 +429,11 @@
           delete known_list[[row,col]]
         else
           known_list[[row,col]] = '#'
-        show_map();      
-      }
+        show_map();
+      };
     }
 
     function on_map_right(button) {
-      var next = {'':' ', '#':' ', ' ':''};
-      
       var [row, col] = button.id.split('-')
       if (known_list[[row,col]] === ' ')
         delete known_list[[row,col]]
@@ -468,21 +444,21 @@
           delete known_list[[row,col]]
         else
           known_list[[row,col]] = ' '
-        show_map();      
+        show_map();
       }
+      return false;
     }
-    
+
     window.navi_click = function(cell) {
-      console.log(cell)
-      if (cell[0]==='c')  {
-        hl_col = cell.substr(1)===hl_col ? undefined : cell.substr(1);
+      var value = Number(cell.substr(1));
+      if (cell[0] === 'c')  {
+        hl_col = value === hl_col ? undefined : value;
       }
       else {
-        hl_row = cell.substr(1)===hl_row ? undefined : cell.substr(1);
+        hl_row = value === hl_row ? undefined : value;
       }
-      show_map();      
-      console.log(hl_row, hl_col);
-    };
+      show_map();
+    }
 
     function register_listeners() {
       var handle = func => ev => {
@@ -496,8 +472,9 @@
       map.addEventListener("contextmenu", handle(on_map_right));
     }
 
-    init();
+    init()
 })();
+
 </script>
 
   </body>
