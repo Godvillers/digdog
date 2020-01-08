@@ -425,25 +425,26 @@
         result += "<tr><td class='map_numbers' onclick='navi_click(\"r"+row+"\")'>"+(entry_row-row)+"</td>"
         for (col=left; col<=right; col++) {
           var cell = amap[row][col];
+          var title = "title='["+(col-entry_col)+":"+(entry_row-row)+"]' "
           if (col===hl_col || row===hl_row)
             hl = "hl";
           else
             hl = "";
           if (cell === 'В')
-            result += "<td class='enterance "+hl+"'>В</td>";
+            result += "<td "+title+"class='enterance "+hl+"'>В</td>";
           else if (known_list[[row,col]] !== undefined || force_buttons ) {
               var symbol = known_list[[row,col]] === "#" ? "#" : known_list[[row,col]] === undefined ? "&nbsp;" : "•";
-              result += "<td class='map_button "+hl+"'> <input type='button' id='"+row+"-"+col+"' class='"+(cell.indexOf("К") > -1 ? "vault_btn" : "button")+"' value='"+symbol+"'> </td>";
+              result += "<td "+title+"class='map_button "+hl+"'> <input type='button' id='"+row+"-"+col+"' class='"+(cell.indexOf("К") > -1 ? "vault_btn" : "button")+"' value='"+symbol+"'> </td>";
           }
           else {
             if (cell.replace('К','').replace('?','') === '')
-                result += "<td class='"+hl+" "+(cell.indexOf("К") > -1 ? "vault" : "known_space")+"'>&nbsp;</td>";
+                result += "<td "+title+"class='"+hl+" "+(cell.indexOf("К") > -1 ? "vault" : "known_space")+"'>&nbsp;</td>";
             else if (cell === '#')
-                result += "<td class='known_wall "+hl+"'>#</td>";
+                result += "<td "+title+"class='known_wall "+hl+"'>#</td>";
             else if (cell.indexOf('#') > -1  || cell === "?")
-                result += "<td class='map_button "+hl+"'> <input type='button' id='"+row+"-"+col+"' class='"+(cell.indexOf("К") > -1 ? "vault_btn" : "button")+"' value='?'> </td>";
+                result += "<td "+title+"class='map_button "+hl+"'> <input type='button' id='"+row+"-"+col+"' class='"+(cell.indexOf("К") > -1 ? "vault_btn" : "button")+"' value='?'> </td>";
             else
-                result += "<td class='"+hl+" "+(cell.indexOf("К") > -1 ? "vault" : "known_space")+"'> </td>"
+                result += "<td "+title+"class='"+hl+" "+(cell.indexOf("К") > -1 ? "vault" : "known_space")+"'> </td>"
           }
         };
         result += "<td class='map_numbers' onclick='navi_click(\"r"+row+"\")'>"+(entry_row-row)+"</td></tr>"
