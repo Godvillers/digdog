@@ -56,6 +56,9 @@
       </div>
     </form>
   <br>
+  <button type="button" id="link2clipboard">Ссылка на карту</button>
+  <br>
+  <textarea id="link" rows="1" cols="50"></textarea>
   <br>
   <div id="info">
     Левая кнопка устанавливает/убирает капиталку<br>
@@ -349,8 +352,37 @@
       return result
     }
 
+    function getURLParameters() {
+      var params = location.search.substr(1).split("&");
+      var result = {};
+      params.forEach(function(param) {
+        var parts = param.split("=");
+        result[parts[0]] = parts[1];
+      });
+      return result;
+    }
+
     function init() {
       generate_known_maps();
+      var params = getURLParameters();
+      var keys = Object.keys(params);
+      for (var i = 0; i < keys.length; i++) {
+        switch(keys[i]) {
+          case "points":
+            var points = params[keys[i]].split(";");
+            for (var j = 0; j < points.length; j++) {
+              var point = points[j].split("-");
+              known_list[point[0]] = point[1] === "1" ? "#" : " ";
+            }
+            break;
+          case "hl_col":
+            hl_col = Number(params[keys[i]]);
+            break;
+          case "hl_row":
+            hl_row = Number(params[keys[i]]);
+            break;
+        }
+      }
       show_map();
       register_listeners();
     }
@@ -501,9 +533,42 @@
         if (btn.tagName === "INPUT")
           func(btn);
       };};
+      var handle_clp = function() {
+        var s = decodeURIComponent(window.location.href.split("?")[0]);
+        var firstparam = true;
+        var keys = Object.keys(known_list);
+        if (keys.length > 0) {
+          s = s + "?points=";
+          for (var i=0; i<keys.length; i++) {
+            s = s + keys[i] + (known_list[keys[i]] === "#" ? "-1;" : "-0;");
+          }
+          s = s.slice(0, -1);
+          firstparam = false;
+        }
+        if (hl_col !== undefined) {
+          s = s + (firstparam === true ? "?" : "&" ) + "hl_col=" + hl_col;
+          firstparam = false;
+        }
+        if (hl_row !== undefined) {
+          s = s + (firstparam === true ? "?" : "&" ) + "hl_row=" + hl_row;
+        }
+        var link = document.getElementById("link");
+        link.value = s;
+        link.focus();
+        link.select();
+        try {
+          var successful = document.execCommand('copy');
+          alert("Скопировано");
+        } catch (err) {
+          alert("Скопировать не вышло");
+        }
+      }
+
       var map = document.getElementById("Карта");
       map.addEventListener("click", handle(on_map_btn));
       map.addEventListener("contextmenu", handle(on_map_right));
+      var clp = document.getElementById("link2clipboard");
+      clp.addEventListener("click", handle_clp);
     }
 
     init()
