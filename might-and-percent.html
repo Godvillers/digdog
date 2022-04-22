@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <base target="_top">
+    <title>Проценты и Пантеон мощи</title>
+  </head>
+  <body>
+    <form>
+<table>
+  <tr>
+    <th>Уровень</th>
+    <td><input type="number" id="level" value="100" maxlength="3" size="3" oninput="onLevelChange(this.value)"></td>
+  </tr>
+  <tr>
+    <th>Опыт уровня</th> 
+    <td><input type="number" id="might" value="3087108" size="1" oninput="onExpChange(this.value)"></td> 
+  </tr>
+  <tr>
+    <th>Процент уровня</th> 
+    <td><input type="number" id="percent" value="50.00" size="10" oninput="onPercChange(this.value)"></td> 
+  </tr>
+  </table>
+  </form> 
+  <br>
+  <small>Сохранённая локально работает оффлайн</small>
+  <script>
+    function onLevelChange(level) {
+      var exp = parseInt(document.getElementById("might").value);
+      document.getElementById("percent").value  = (exp*100/Math.ceil(Math.pow(1.05,level-1)*49299.352)).toFixed(3);
+    }
+    function onExpChange(exp) {
+      var level = parseInt(document.getElementById("level").value);
+      document.getElementById("percent").value  = (exp*100/Math.ceil(Math.pow(1.05,level-1)*49299.352)).toFixed(3);
+    }
+    function onPercChange(percent) {
+      var level = parseInt(document.getElementById("level").value);
+      document.getElementById("might").value  = Math.ceil(percent/100*Math.ceil(Math.pow(1.05,level-1)*49299.352));
+    }
+</script>
+
+  </body>
+</html>
+
+
